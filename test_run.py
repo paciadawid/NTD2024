@@ -14,14 +14,17 @@ appium_url = 'http://127.0.0.1:4723'
 capabilities = dict(
     automationName='uiautomator2',
     platformName='Android',
-    app=path
+    app=path,
+    newCommandTimeout=600
 )
 
 driver = webdriver.Remote(appium_url, options=UiAutomator2Options().load_capabilities(capabilities))
 
 
-button_1 = driver.find_element(AppiumBy.ID, 'formula_container')
-# button_1_ = driver.find_elements(AppiumBy.ACCESSIBILITY_ID, '1')
+driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
+driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'plus').click()
+driver.find_element(AppiumBy.ACCESSIBILITY_ID, '2').click()
+driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals').click()
 
-
-
+result = driver.find_element(AppiumBy.ID, 'result_final').text
+assert int(result) == 3
