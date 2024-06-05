@@ -10,13 +10,9 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 class TestCalculator(unittest.TestCase):
 
-
-    def test_add_2_values(self):
+    def setUp(self):
         app_name = 'calculator.apk'
-        # path = os.path.join(os.path.abspath(__file__).split(), app_name)
-
         path = str(Path(__file__).parent.joinpath(app_name))
-
         appium_url = 'http://127.0.0.1:4723'
 
         capabilities = dict(
@@ -25,13 +21,25 @@ class TestCalculator(unittest.TestCase):
             app=path,
             newCommandTimeout=600
         )
+        self.driver = webdriver.Remote(appium_url, options=UiAutomator2Options().load_capabilities(capabilities))
 
-        driver = webdriver.Remote(appium_url, options=UiAutomator2Options().load_capabilities(capabilities))
+    def test_add_2_values(self):
 
-        driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
-        driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'plus').click()
-        driver.find_element(AppiumBy.ACCESSIBILITY_ID, '2').click()
-        driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'plus').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, '2').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals').click()
 
-        result = driver.find_element(AppiumBy.ID, 'result_final').text
+        result = self.driver.find_element(AppiumBy.ID, 'result_final').text
         self.assertEqual(int(result), 3)
+
+    def test_division_by_zero(self):
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'divide').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, '0').click()
+        self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals').click()
+        error_message = self.driver.find_element(AppiumBy.ID, 'result_preview').text
+        self.assertEqual(error_message, "Can't divide by 0")
+
+    def tearDown(self):
+        self.driver.quit()
