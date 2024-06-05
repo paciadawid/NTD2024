@@ -3,7 +3,6 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 
 class MainScreen:
-
     # static selectors
     __plus_selector = (AppiumBy.ACCESSIBILITY_ID, 'plus')
     __equals_selector = (AppiumBy.ACCESSIBILITY_ID, 'equals')
@@ -17,10 +16,11 @@ class MainScreen:
     def __init__(self, driver: webdriver.Remote):
         self.driver = driver
 
-    def add_values(self, digit_1: int, digit_2: int):
-        self.driver.find_element(self.__digit_selector_strategy, str(digit_1)).click()
-        self.driver.find_element(*self.__plus_selector).click()
-        self.driver.find_element(self.__digit_selector_strategy, str(digit_2)).click()
+    def add_values(self, *numbers):
+        for i, number in enumerate(numbers):
+            self.__enter_number(number)
+            if i < len(numbers) - 1:
+                self.driver.find_element(*self.__plus_selector).click()
         self.driver.find_element(*self.__equals_selector).click()
 
     def divide_values(self, digit_1: int, digit_2: int):
@@ -34,3 +34,7 @@ class MainScreen:
 
     def get_preview_message(self) -> str:
         return self.driver.find_element(*self.__result_preview_selector).text
+
+    def __enter_number(self, number):
+        for digit in str(number):
+            self.driver.find_element(self.__digit_selector_strategy, str(digit)).click()

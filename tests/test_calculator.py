@@ -27,6 +27,11 @@ class TestCalculator(unittest.TestCase):
         result = self.main_screen.get_result()
         self.assertEqual(int(result), 3)
 
+    def test_add_multiple_numbers(self):
+        self.main_screen.add_values(1, 20, 100)
+        result = self.main_screen.get_result()
+        self.assertEqual(int(result), 121)
+
     def test_division_by_zero(self):
         self.main_screen.divide_values(1, 0)
         error_message = self.main_screen.get_preview_message()
