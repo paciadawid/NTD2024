@@ -1,5 +1,7 @@
 from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class MainScreen:
@@ -9,12 +11,23 @@ class MainScreen:
     __divide_selector = (AppiumBy.ACCESSIBILITY_ID, 'divide')
     __result_selector = (AppiumBy.ID, 'result_final')
     __result_preview_selector = (AppiumBy.ID, 'result_preview')
+    __drag_handle_view_selector = (AppiumBy.ID, 'drag_handle_view')
+    __empty_history_selector = (AppiumBy.ID, 'empty_history_view')
+    __percent_selector = (AppiumBy.ACCESSIBILITY_ID, 'percent')
 
     # dynamic selectors
     __digit_selector_strategy = AppiumBy.ACCESSIBILITY_ID
 
     def __init__(self, driver: webdriver.Remote):
         self.driver = driver
+
+    def wait_until_empty_history_disappear(self):
+        WebDriverWait(self.driver, 10).until(EC.invisibility_of_element(self.__empty_history_selector))
+
+    def expand_history_view(self):
+        start_el = self.driver.find_element(*self.__result_preview_selector)
+        end_el = self.driver.find_element(*self.__percent_selector)
+        self.driver.scroll(start_el, end_el)
 
     def add_values(self, *numbers):
         for i, number in enumerate(numbers):

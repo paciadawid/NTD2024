@@ -19,12 +19,15 @@ capabilities = dict(
 )
 
 driver = webdriver.Remote(appium_url, options=UiAutomator2Options().load_capabilities(capabilities))
+#
+#
+# driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
+# driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'plus').click()
+# driver.find_element(AppiumBy.ACCESSIBILITY_ID, '2').click()
+test_el = driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals')
+#
+# result = driver.find_element(AppiumBy.ID, 'result_final').text
+# assert int(result) == 3
 
 
-driver.find_element(AppiumBy.ACCESSIBILITY_ID, '1').click()
-driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'plus').click()
-driver.find_element(AppiumBy.ACCESSIBILITY_ID, '2').click()
-driver.find_element(AppiumBy.ACCESSIBILITY_ID, 'equals').click()
-
-result = driver.find_element(AppiumBy.ID, 'result_final').text
-assert int(result) == 3
+driver.swipe(200, 100, 200, 800)

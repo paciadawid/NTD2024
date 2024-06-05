@@ -44,6 +44,11 @@ class TestCalculator(unittest.TestCase):
         error_message = self.main_screen.get_preview_message()
         self.assertEqual(error_message, "Can't divide by 0")
 
+    def test_scroll_and_check_history(self):
+        self.main_screen.expand_history_view()
+        self.main_screen.add_values(1, 2)
+        self.main_screen.wait_until_empty_history_disappear()
+
     def tearDown(self):
         self.driver.quit()
 
