@@ -1,12 +1,19 @@
 import unittest
 from pathlib import Path
 from appium import webdriver
+from appium.webdriver.appium_service import AppiumService
 
 from appium.options.android import UiAutomator2Options
 from screens.main import MainScreen
 
 
 class TestCalculator(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.appium_service = AppiumService()
+        cls.appium_service.start()
+
 
     def setUp(self):
         app_name = 'calculator.apk'
@@ -39,3 +46,7 @@ class TestCalculator(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.appium_service.stop()
